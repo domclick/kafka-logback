@@ -71,13 +71,17 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", valueSerializer);
         parseProperties(props);
-        startProducer(props);
+        try {
+            startProducer(props);
+        } catch (Exception e) {
+            addError("Unable to start Kafka Producer", e);
+        }
     }
 
     void parseProperties(Properties properties) {
         if (customProps != null) {
             customProps.forEach(property -> {
-                String[] p = property.split("=");
+                String[] p = property.split("\\|");
                 if (p.length == 2) {
                     properties.put(p[0], p[1]);
                 } else {
@@ -88,20 +92,27 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
     }
 
     // aka unit test friendly
-    void startProducer(Properties props) {
+    void startProducer(Properties props) throws Exception {
         producer = new KafkaProducer<>(props);
     }
 
     @Override
     public void stop() {
         super.stop();
-        producer.close();
+        if (producer != null)
+            producer.close();
     }
 
     @Override
     protected void append(ILoggingEvent event) {
-        String payload = layout.doLayout(event);
-        producer.send(new ProducerRecord<>(topic, System.nanoTime(), payload));
+        if (producer != null) {
+            String payload = layout.doLayout(event);
+            try {
+                producer.send(new ProducerRecord<>(topic, System.nanoTime(), payload)).get();
+            } catch (Exception e) {
+                addError("Unable to send message to Kafka", e);
+            }
+        }
     }
 
 }
