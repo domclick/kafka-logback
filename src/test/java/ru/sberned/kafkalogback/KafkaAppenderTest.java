@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
  * Created by empatuk on 30/11/2016.
  */
 public class KafkaAppenderTest {
-    private KafkaProducer<Long, String> mockerProducer = mock(KafkaProducer.class);
+    private KafkaProducer<String, String> mockerProducer = mock(KafkaProducer.class);
     private KafkaAppender appender;
 
     private class TestKafkaAppender extends KafkaAppender {

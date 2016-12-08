@@ -8,7 +8,7 @@ Sample configuration
     <appender name="KAFKA" class="ru.sberned.kafkalogback.KafkaAppender">
         <topic>test-topic</topic>
         <bootstrapServers>localhost:2181</bootstrapServers>
-        <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+        <layout class="ru.sberned.kafkalogback.CustomJsonLayout">
             <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter"/>
         </layout>
     </appender>

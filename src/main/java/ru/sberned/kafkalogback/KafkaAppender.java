@@ -22,7 +22,7 @@ import java.util.Properties;
  *     <appender name="KAFKA" class="ru.sberned.kafkalogback.KafkaAppender">
  *         <topic>test-topic</topic>
  *         <bootstrapServers>localhost:2181</bootstrapServers>
- *         <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+ *         <layout class="ru.sberned.kafkalogback.CustomJsonLayout">
  *             <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter"/>
  *         </layout>
  *     </appender>
@@ -35,7 +35,7 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
     private String topic;
     private String bootstrapServers;
     private String valueSerializer;
-    Producer<Long, String> producer;
+    Producer<String, String> producer;
     private Layout<ILoggingEvent> layout;
     private List<String> customProps;
 
@@ -65,7 +65,7 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
         Objects.requireNonNull(bootstrapServers, "bootstrapServers must not be null");
         Objects.requireNonNull(valueSerializer, "valueSerializer must not be null");
         Objects.requireNonNull(layout, "layout must not be null");
-        super.start();
+
         Properties props = new Properties();
         props.put("bootstrap.servers", bootstrapServers);
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
@@ -73,6 +73,7 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
         parseProperties(props);
         try {
             startProducer(props);
+            super.start();
         } catch (Exception e) {
             addError("Unable to start Kafka Producer", e);
         }
@@ -106,9 +107,8 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
     @Override
     protected void append(ILoggingEvent event) {
         if (producer != null) {
-            String payload = layout.doLayout(event);
             try {
-                producer.send(new ProducerRecord<>(topic, System.nanoTime(), payload)).get();
+                producer.send(new ProducerRecord<>(topic, String.valueOf(Math.random()), layout.doLayout(event))).get();
             } catch (Exception e) {
                 addError("Unable to send message to Kafka", e);
             }
