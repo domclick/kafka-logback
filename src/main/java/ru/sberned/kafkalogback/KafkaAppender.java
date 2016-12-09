@@ -3,6 +3,7 @@ package ru.sberned.kafkalogback;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import ch.qos.logback.core.Layout;
+import lombok.Setter;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -31,6 +32,7 @@ import java.util.Properties;
  *     </root>
  * </configuration>
  */
+@Setter
 public class KafkaAppender extends AppenderBase<ILoggingEvent> {
     private String topic;
     private String bootstrapServers;
@@ -38,26 +40,6 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
     Producer<String, String> producer;
     private Layout<ILoggingEvent> layout;
     private List<String> customProps;
-
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
-
-    public void setBootstrapServers(String bootstrapServers) {
-        this.bootstrapServers = bootstrapServers;
-    }
-
-    public void setValueSerializer(String valueSerializer) {
-        this.valueSerializer = valueSerializer;
-    }
-
-    public void setLayout(Layout<ILoggingEvent> layout) {
-        this.layout = layout;
-    }
-
-    public void setCustomProps(List<String> customProps) {
-        this.customProps = customProps;
-    }
 
     @Override
     public void start() {
@@ -79,24 +61,6 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
         }
     }
 
-    void parseProperties(Properties properties) {
-        if (customProps != null) {
-            customProps.forEach(property -> {
-                String[] p = property.split("\\|");
-                if (p.length == 2) {
-                    properties.put(p[0], p[1]);
-                } else {
-                    System.out.println("Unable to parse property string: " + property);
-                }
-            });
-        }
-    }
-
-    // aka unit test friendly
-    void startProducer(Properties props) throws Exception {
-        producer = new KafkaProducer<>(props);
-    }
-
     @Override
     public void stop() {
         super.stop();
@@ -115,4 +79,21 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
         }
     }
 
+    void parseProperties(Properties properties) {
+        if (customProps != null) {
+            customProps.forEach(property -> {
+                String[] p = property.split("\\|");
+                if (p.length == 2) {
+                    properties.put(p[0], p[1]);
+                } else {
+                    addError("Unable to parse property string: " + property);
+                }
+            });
+        }
+    }
+
+    // aka unit test friendly
+    void startProducer(Properties props) throws Exception {
+        producer = new KafkaProducer<>(props);
+    }
 }

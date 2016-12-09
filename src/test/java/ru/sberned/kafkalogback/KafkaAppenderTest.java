@@ -14,8 +14,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -90,8 +89,8 @@ public class KafkaAppenderTest {
 
         Properties properties = new Properties();
         appender.parseProperties(properties);
-        assertEquals(value1, properties.getProperty(key1));
-        assertNull(properties.getProperty(key2));
+        assertThat(properties.getProperty(key1)).isEqualTo(value1);
+        assertThat(properties.getProperty(key2)).isNull();
     }
 
     @Test

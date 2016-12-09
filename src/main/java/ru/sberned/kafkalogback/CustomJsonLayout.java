@@ -3,6 +3,7 @@ package ru.sberned.kafkalogback;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.contrib.json.classic.JsonLayout;
 import ch.qos.logback.core.util.ContextUtil;
+import lombok.Setter;
 
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -12,12 +13,14 @@ import java.util.Map;
 /**
  * Created by empatuk on 05/12/2016.
  */
+@Setter
 public class CustomJsonLayout extends JsonLayout {
     public static final String LINE_NUMBER = "line_number";
     public static final String CLASS_NAME = "class_name";
     public static final String METHOD_NAME = "method_name";
     public static final String FILE_NAME = "file_name";
     public static final String HOST = "host";
+    private final String HOST_NAME = getHostName();
 
     private boolean includeLineNumber = true;
     private boolean includeClassName = true;
@@ -29,7 +32,7 @@ public class CustomJsonLayout extends JsonLayout {
 
     @Override
     protected void addCustomDataToJsonMap(Map<String, Object> map, ILoggingEvent event) {
-        add(HOST, includeHost, getHostName(), map);
+        add(HOST, includeHost, HOST_NAME, map);
         if (event.hasCallerData()) {
             StackTraceElement callerData = event.getCallerData()[0];
             addLine(LINE_NUMBER, includeLineNumber, callerData.getLineNumber(), map);
@@ -44,7 +47,7 @@ public class CustomJsonLayout extends JsonLayout {
                 if (p.length == 2) {
                     add(p[0], true, p[1], map);
                 } else {
-                    System.out.println("Unable to parse property string: " + field);
+                    addError("Unable to parse property string: " + field);
                 }
             });
         }
@@ -62,29 +65,5 @@ public class CustomJsonLayout extends JsonLayout {
         if (field) {
             map.put(fieldName, value);
         }
-    }
-
-    public void setIncludeLineNumber(boolean includeLineNumber) {
-        this.includeLineNumber = includeLineNumber;
-    }
-
-    public void setIncludeClassName(boolean includeClassName) {
-        this.includeClassName = includeClassName;
-    }
-
-    public void setIncludeMethodName(boolean includeMethodName) {
-        this.includeMethodName = includeMethodName;
-    }
-
-    public void setIncludeHost(boolean includeHost) {
-        this.includeHost = includeHost;
-    }
-
-    public void setAdditionalFields(List<String> additionalFields) {
-        this.additionalFields = additionalFields;
-    }
-
-    public void setIncludeFileName(boolean includeFileName) {
-        this.includeFileName = includeFileName;
     }
 }

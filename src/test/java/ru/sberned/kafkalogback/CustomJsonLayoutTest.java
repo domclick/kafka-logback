@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 import static ru.sberned.kafkalogback.CustomJsonLayout.*;
 
@@ -41,8 +42,8 @@ public class CustomJsonLayoutTest {
         Map<String, Object> result = new HashMap<>();
         layout.addCustomDataToJsonMap(result, new LoggingEvent());
 
-        assertTrue(result.size() == 1);
-        assertNotNull(result.get(HOST));
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(HOST)).isNotNull();
     }
 
     @Test
@@ -50,12 +51,12 @@ public class CustomJsonLayoutTest {
         Map<String, Object> result = new HashMap<>();
         layout.addCustomDataToJsonMap(result, event());
 
-        assertTrue(result.size() == 5);
-        assertNotNull(result.get(HOST));
-        assertEquals(result.get(CLASS_NAME), "class");
-        assertEquals(result.get(METHOD_NAME), "method");
-        assertEquals(result.get(FILE_NAME), "file");
-        assertEquals(result.get(LINE_NUMBER), 3);
+        assertThat(result.size()).isEqualTo(5);
+        assertThat(result.get(HOST)).isNotNull();
+        assertThat(result.get(CLASS_NAME)).isEqualTo("class");
+        assertThat(result.get(METHOD_NAME)).isEqualTo("method");
+        assertThat(result.get(FILE_NAME)).isEqualTo("file");
+        assertThat(result.get(LINE_NUMBER)).isEqualTo(3);
     }
 
     @Test
@@ -65,9 +66,9 @@ public class CustomJsonLayoutTest {
         layout.setAdditionalFields(Arrays.asList(key1 + "|" + value1, key2 + ":value2"));
         layout.addCustomDataToJsonMap(result, new LoggingEvent());
 
-        assertTrue(result.size() == 2);
-        assertNotNull(result.get(HOST));
-        assertEquals(result.get(key1), value1);
-        assertNull(result.get(key2));
+        assertThat(result.size()).isEqualTo(2);
+        assertThat(result.get(HOST)).isNotNull();
+        assertThat(result.get(key1)).isEqualTo(value1);
+        assertThat(result.get(key2)).isNull();
     }
 }
