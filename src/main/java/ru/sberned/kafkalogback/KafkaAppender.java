@@ -8,6 +8,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
@@ -37,9 +38,10 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
     private String topic;
     private String bootstrapServers;
     private String valueSerializer;
+    private boolean failOnStartup;
     Producer<String, String> producer;
     private Layout<ILoggingEvent> layout;
-    private List<String> customProps;
+    private List<String> customProps = new ArrayList<>();
 
     @Override
     public void start() {
@@ -57,7 +59,11 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
             startProducer(props);
             super.start();
         } catch (Exception e) {
-            addError("Unable to start Kafka Producer", e);
+            if (failOnStartup) {
+                addError("Unable to start Kafka Producer", e);
+            } else {
+                addWarn("Unable to start Kafka Producer", e);
+            }
         }
     }
 
@@ -68,13 +74,17 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
             producer.close();
     }
 
+    public void addCustomProp(String customProp) {
+        customProps.add(customProp);
+    }
+
     @Override
     protected void append(ILoggingEvent event) {
         if (producer != null) {
             try {
                 producer.send(new ProducerRecord<>(topic, String.valueOf(Math.random()), layout.doLayout(event))).get();
             } catch (Exception e) {
-                addError("Unable to send message to Kafka", e);
+                addWarn("Unable to send message to Kafka", e);
             }
         }
     }
@@ -86,7 +96,11 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
                 if (p.length == 2) {
                     properties.put(p[0], p[1]);
                 } else {
-                    addError("Unable to parse property string: " + property);
+                    if (failOnStartup) {
+                        addError("Unable to parse property string: " + property);
+                    } else {
+                        addWarn("Unable to parse property string: " + property);
+                    }
                 }
             });
         }
