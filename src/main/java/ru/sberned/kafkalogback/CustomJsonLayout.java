@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,11 @@ public class CustomJsonLayout extends JsonLayout {
     private boolean includeHost = true;
     private boolean includeFileName = true;
     // fields splitted by |, where left is a key and right is a value
-    private List<String> additionalFields;
+    private List<String> additionalFields = new ArrayList<>();
+
+    public void addAdditionalField(String additionalField) {
+        additionalFields.add(additionalField);
+    }
 
     @Override
     protected void addCustomDataToJsonMap(Map<String, Object> map, ILoggingEvent event) {
@@ -47,7 +52,7 @@ public class CustomJsonLayout extends JsonLayout {
                 if (p.length == 2) {
                     add(p[0], true, p[1], map);
                 } else {
-                    addError("Unable to parse property string: " + field);
+                    addWarn("Unable to parse property string: " + field);
                 }
             });
         }
