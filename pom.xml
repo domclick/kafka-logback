@@ -6,7 +6,7 @@
 
     <groupId>ru.sberned</groupId>
     <artifactId>kafka-logback</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
     <build>
         <plugins>
             <plugin>
