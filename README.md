@@ -1,14 +1,14 @@
 This is a logback appender for Kafka (0.10.1.0 kafka-client used)
 This appender expects topic, bootstrapServers, valueSerializer and layout as mandatory.
-You could also supply additional kafka customProps in &lt;customProps&gt; tag in the following manner
-&lt;customProps&gt;key1|value1,key2|value2&lt;/customProps&gt;
+You could also supply additional kafka customProps in `<customProps>` tag in the following manner
+`<customProps>key1|value1,key2|value2</customProps>`
 <p>
 We recommend wrapping this appender inside AsyncAppender in order not to block your application (consider setting neverBlock set to true).
 This appender ships with CustomJsonLayout, which extends JsonLayout from logback. It inherits all its properties and adds its own in the same manner.
 List of properties added: includeLineNumber, includeClassName, includeMethodName, includeHost, includeFileName all set to true by default.
 You can also add any constant fields via additionalFields (see sample config below).
 <p>
-Do not forget to add &lt;includeCallerData&gt;true&lt;/includeCallerData&gt; to AsyncAppender in case you need caller data (method, class, file, line number).
+Do not forget to add `<includeCallerData>true</includeCallerData>` to AsyncAppender in case you need caller data (method, class, file, line number).
 Kafka appender could be used with any ither alyout rather than Json, just think about proper kafka value Serializer.
 <p>
 Sample configuration
