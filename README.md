@@ -3,13 +3,13 @@ This appender expects topic, bootstrapServers, valueSerializer and layout as man
 You could also supply additional kafka customProps in `<customProps>` tag in the following manner
 `<customProps>key1|value1,key2|value2</customProps>`
 <p>
-We recommend wrapping this appender inside AsyncAppender in order not to block your application (consider setting neverBlock set to true).
+We recommend wrapping this appender inside AsyncAppender in order not to block your application (consider setting neverBlock to true).
 This appender ships with CustomJsonLayout, which extends JsonLayout from logback. It inherits all its properties and adds its own in the same manner.
 List of properties added: includeLineNumber, includeClassName, includeMethodName, includeHost, includeFileName all set to true by default.
 You can also add any constant fields via additionalFields (see sample config below).
 <p>
 Do not forget to add `<includeCallerData>true</includeCallerData>` to AsyncAppender in case you need caller data (method, class, file, line number).
-Kafka appender could be used with any ither alyout rather than Json, just think about proper kafka value Serializer.
+Kafka appender could be used with any other layout rather than Json, just think about proper kafka value Serializer.
 <p>
 Sample configuration
 ```xml
@@ -41,6 +41,7 @@ Sample configuration
         <appender-ref ref="FILE" />
     </logger>
 
+    <!-- Please note. CONSOLE and FILE appenders are not defined in this example -->
     <root level="TRACE">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE" />
