@@ -12,6 +12,7 @@ Do not forget to add &lt;includeCallerData&gt;true&lt;/includeCallerData&gt; to 
 Kafka appender could be used with any ither alyout rather than Json, just think about proper kafka value Serializer.
 <p>
 Sample configuration
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
@@ -47,3 +48,4 @@ Sample configuration
     </root>
 
 </configuration>
+```
