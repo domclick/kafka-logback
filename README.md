@@ -1,3 +1,5 @@
+# Kafka logback appender [![](https://jitpack.io/v/Sberned/kafka-logback.svg)](https://jitpack.io/#Sberned/kafka-logback)
+
 This is a logback appender for Kafka (0.10.1.0 kafka-client used)
 This appender expects topic, bootstrapServers, valueSerializer and layout as mandatory.
 You could also supply additional kafka customProps in `<customProps>` tag in the following manner
