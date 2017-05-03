@@ -14,6 +14,7 @@ Do not forget to add `<includeCallerData>true</includeCallerData>` to AsyncAppen
 Kafka appender could be used with any other layout rather than Json, just think about proper kafka value Serializer.
 <p>
 Sample configuration
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
