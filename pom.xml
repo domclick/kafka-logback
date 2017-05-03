@@ -6,7 +6,7 @@
 
     <groupId>ru.sberned</groupId>
     <artifactId>kafka-logback</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <licenses>
         <license>
             <name>BSD 3-Clause</name>
