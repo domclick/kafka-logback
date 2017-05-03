@@ -1,4 +1,4 @@
-# Kafka logback appender [![](https://jitpack.io/v/Sberned/kafka-logback.svg)](https://jitpack.io/#Sberned/kafka-logback) ![](https://travis-ci.org/Sberned/kafka-logback.svg?branch=master)
+# Kafka logback appender [![](https://jitpack.io/v/Sberned/kafka-logback.svg)](https://jitpack.io/#Sberned/kafka-logback) ![](https://travis-ci.org/Sberned/kafka-logback.svg?branch=master) ![](https://maven-badges.herokuapp.com/maven-central/ru.sberned/kafka-logback/badge.svg)
 
 This is a logback appender for Kafka (0.10.1.0 kafka-client used)
 This appender expects topic, bootstrapServers, valueSerializer and layout as mandatory.
