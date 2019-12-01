@@ -5,7 +5,7 @@
 
     <groupId>ru.sberned</groupId>
     <artifactId>kafka-logback</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
     <name>kafka-logback</name>
     <description>Configurable kafka appender for logback</description>
@@ -57,6 +57,7 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>3.6.1</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
