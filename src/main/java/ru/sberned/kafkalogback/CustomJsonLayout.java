@@ -2,7 +2,7 @@ package ru.sberned.kafkalogback;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.contrib.json.classic.JsonLayout;
-import ch.qos.logback.core.util.ContextUtil;
+import ch.qos.logback.core.util.NetworkAddressUtil;
 import lombok.Setter;
 
 import java.net.SocketException;
@@ -60,7 +60,7 @@ public class CustomJsonLayout extends JsonLayout {
 
     private String getHostName() {
         try {
-            return ContextUtil.getLocalHostName();
+            return NetworkAddressUtil.getLocalHostName();
         } catch (UnknownHostException|SocketException e) {
             return "undefined";
         }
