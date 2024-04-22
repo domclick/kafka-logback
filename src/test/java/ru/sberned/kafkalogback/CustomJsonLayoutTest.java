@@ -2,14 +2,14 @@ package ru.sberned.kafkalogback;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.sberned.kafkalogback.CustomJsonLayout.*;
 
 /**
@@ -34,7 +34,7 @@ public class CustomJsonLayoutTest {
         Map<String, Object> result = new HashMap<>();
         layout.addCustomDataToJsonMap(result, event());
 
-        assertTrue(result.size() == 0);
+        assertEquals(0, result.size());
     }
 
     @Test

@@ -7,7 +7,7 @@ import ch.qos.logback.core.Layout;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Properties;
@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchNullPointerException;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -51,28 +52,28 @@ public class KafkaAppenderTest {
         }
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testLayoutIsMissing() {
         appender = new TestKafkaAppender("servers", "topic", "serializer", null);
-        appender.start();
+        catchNullPointerException(() -> appender.start());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testTopicIsMissing() {
         appender = new TestKafkaAppender("servers", null, "serializer", new JsonLayout());
-        appender.start();
+        catchNullPointerException(() -> appender.start());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testSerializerIsMissing() {
         appender = new TestKafkaAppender("servers", "topic", null, new JsonLayout());
-        appender.start();
+        catchNullPointerException(() -> appender.start());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testBootstrapServersAreMissing() {
         appender = new TestKafkaAppender(null, "topic", "serializer", new JsonLayout());
-        appender.start();
+        catchNullPointerException(() -> appender.start());
     }
 
     @Test
